@@ -54,5 +54,15 @@ print(x.get(2))
 # not available
 print(x.get(4, "not available"))
 
-# Strings
+# File objects
 
+def open_file(file):
+    try:
+        file = open("enrollment.csv", "r")
+
+    except IOError as error:
+        print("%s: could not be opened: %s" % (file, error.strerror)
+    except EmptyFileError as error:
+        print(error)
+    finally:
+        return file;
