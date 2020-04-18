@@ -16,7 +16,7 @@ Import and install pip libraries from requirements.txt
 
 ## Create an environment
 
-1. Create an environment using file:
+1. Create an environment using a text file:
 
     
         $ conda env create --<env_name> --<file>
