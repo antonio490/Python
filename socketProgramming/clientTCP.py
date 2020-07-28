@@ -10,7 +10,7 @@ import random
 import socket
 import traceback
 
-logging.basicConfig(filename='TCP_Test.log', level=logging.DEBUG, format='[%(asctime)s][%(filename)s] %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+logging.basicConfig(filename='TCP_Client.log', level=logging.DEBUG, format='[%(asctime)s][%(filename)s] %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
 class Client():
     def __init__(self):
@@ -71,6 +71,20 @@ if __name__ == "__main__":
             logging.debug('<< ' + ' '.join(hex(b) for b in data if b != 0x55))   
 
             ## Do Something
+            if data:
+
+                b = bytearray(data)
+                if b[0] == client.indicationENQ:
+                    b[0] = 0x6
+
+                    print("SEND ACK")
+                    sock.send(client.indicationACK)
+
+                else:
+                    print("MSG UNKNOWN")
+                    sock.send(0x0F)
+
+
 
         except:
             logging.info('[controller.trinket] Error com cycle')
