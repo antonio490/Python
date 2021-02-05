@@ -9,15 +9,25 @@ from selenium.webdriver.support import expected_conditions as EC
 DELAY = 3 # seconds
 page_url = "https://apps.indraweb.net/registrohorario/#/dashboard/registro"
 
-def login(driver):
+keyFILE = "/home/antonio/INDRA.key"
+
+def credentials():
+    creds = {}
+    with open(keyFILE) as file:
+        for line in file:
+            key, value = line.strip().split('=')
+            creds[key] = value
+    return creds
+
+def login(driver, creds):
     try:
         myElem = WebDriverWait(driver, DELAY).until(EC.presence_of_element_located((By.ID, 'login')))
         print("Page is ready!")
 
-        driver.find_element_by_id("login").send_keys("username")
+        driver.find_element_by_id("login").send_keys(creds["username"])
         print("Username")
 
-        driver.find_element_by_id("passwd").send_keys("password")
+        driver.find_element_by_id("passwd").send_keys(creds["password"])
         print("Password")
 
         driver.find_element_by_id("nsg-x1-logon-button").click()
@@ -31,7 +41,8 @@ def main():
     driver.get(page_url)
     dir(driver)
 
-    login(driver)
+    creds = credentials()
+    login(driver, creds)
     #time()
 
     driver.close()
