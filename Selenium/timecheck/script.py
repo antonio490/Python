@@ -6,9 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-DELAY = 3 # seconds
+DELAY = 5 # seconds
 page_url = "https://apps.indraweb.net/registrohorario/#/dashboard/registro"
-
 keyFILE = "/home/antonio/INDRA.key"
 
 def credentials():
@@ -21,20 +20,41 @@ def credentials():
 
 def login(driver, creds):
     try:
-        myElem = WebDriverWait(driver, DELAY).until(EC.presence_of_element_located((By.ID, 'login')))
-        print("Page is ready!")
+        WebDriverWait(driver, DELAY).until(EC.presence_of_element_located((By.ID, 'login')))
 
         driver.find_element_by_id("login").send_keys(creds["username"])
-        print("Username")
-
         driver.find_element_by_id("passwd").send_keys(creds["password"])
-        print("Password")
 
         driver.find_element_by_id("nsg-x1-logon-button").click()
         print("Logged")
 
     except TimeoutException:
         print("Too much time!")
+
+def registerTime(driver):
+        try:
+            WebDriverWait(driver, DELAY).until(EC.presence_of_element_located((By.CLASS_NAME, 'content2')))
+
+            if driver.find_element_by_class_name("alone"):
+                btnEnd = driver.find_element_by_class_name("alone")
+                btnEnd.find_element_by_class_name("c-button").click()
+
+                WebDriverWait(driver, DELAY).until(EC.presence_of_element_located((By.CLASS_NAME, 'button-box')))
+
+                btn = driver.find_element_by_class_name("button-box")
+                btn.find_element_by_class_name("c-button").click()
+
+                print("Jornada registrada")
+
+            else:
+                btnStart = driver.find_element_by_class_name("content2")
+                btnStart.find_element_by_class_name("c-button").click()
+                print("Jornada iniciada")
+
+
+
+        except TimeoutException:
+            print("Too much time!")
 
 def main():
     driver = webdriver.Firefox()
@@ -43,7 +63,7 @@ def main():
 
     creds = credentials()
     login(driver, creds)
-    #time()
+    registerTime(driver)
 
     driver.close()
 
